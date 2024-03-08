@@ -1,11 +1,10 @@
 {
   "name": "@glare-labs/material-tokens-generator",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "publishConfig": {
     "access": "public"
   },
-  "private": "true",
-  "description": "",
+  "description": "Use the @material/material-color-utilities tool to create a set of tokens based on material design.",
   "keywords": [
     "javascript",
     "material",
