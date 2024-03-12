@@ -1,9 +1,9 @@
 /* eslint-disable node/no-unpublished-import */
-import {MaterialDynamicColorGenerator} from '../dist/src/index.js';
+import { argbFromHex } from '@material/material-color-utilities';
+import {MaterialTokensGenerator} from 'src';
 
-const colors = MaterialDynamicColorGenerator.ToStyleText(
-  MaterialDynamicColorGenerator.GenerateBySourceColor('#12be40'),
-  {toKebabcase: true}
+const colors = MaterialTokensGenerator.ToStyleText(
+  MaterialDynamicColorGenerator.GenerateBySourceColor(argbFromHex('#1212ab'))
 );
 
 console.log(colors);

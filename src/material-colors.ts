@@ -1,4 +1,6 @@
-import { MaterialDynamicColors } from "@material/material-color-utilities";
+import {MaterialDynamicColors} from '@material/material-color-utilities';
+
+export type TMaterialColors = Record<keyof typeof MaterialColors, string>;
 
 /**
  * A Mapping of color token name to MCU HCT color function generator.
