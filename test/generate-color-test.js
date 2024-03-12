@@ -1,9 +1,8 @@
 /* eslint-disable node/no-unpublished-import */
-import { argbFromHex } from '@material/material-color-utilities';
-import {MaterialTokensGenerator} from 'src';
+import {MaterialTokensGenerator} from '../build/index.esm.js';
 
 const colors = MaterialTokensGenerator.ToStyleText(
-  MaterialDynamicColorGenerator.GenerateBySourceColor(argbFromHex('#1212ab'))
+  MaterialTokensGenerator.GenerateBySourceColor('rgba(111,12,133, 0.2)')
 );
 
 console.log(colors);
