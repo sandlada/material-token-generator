@@ -1,11 +1,11 @@
 import {
-  MaterialDynamicColors,
   Hct,
   SchemeContent,
   hexFromArgb,
   DynamicScheme,
   SchemeTonalSpot,
 } from '@material/material-color-utilities';
+import { MaterialColors } from './material-colors';
 
 function toKebabCase(str: string) {
   return str
@@ -33,67 +33,8 @@ function toKebabCase(str: string) {
  *
  */
 
-/**
- * A Mapping of color token name to MCU HCT color function generator.
- */
-const materialColors = {
-  primaryPaletteKeyColor: MaterialDynamicColors.primaryPaletteKeyColor,
-  secondaryPaletteKeyColor: MaterialDynamicColors.secondaryPaletteKeyColor,
-  tertiaryPaletteKeyColor: MaterialDynamicColors.tertiaryPaletteKeyColor,
-  neutralPaletteKeyColor: MaterialDynamicColors.neutralPaletteKeyColor,
-  neutralVariantPaletteKeyColor:
-    MaterialDynamicColors.neutralVariantPaletteKeyColor,
-  background: MaterialDynamicColors.background,
-  onBackground: MaterialDynamicColors.onBackground,
-  surface: MaterialDynamicColors.surface,
-  surfaceDim: MaterialDynamicColors.surfaceDim,
-  surfaceBright: MaterialDynamicColors.surfaceBright,
-  surfaceContainerLowest: MaterialDynamicColors.surfaceContainerLowest,
-  surfaceContainerLow: MaterialDynamicColors.surfaceContainerLow,
-  surfaceContainer: MaterialDynamicColors.surfaceContainer,
-  surfaceContainerHigh: MaterialDynamicColors.surfaceContainerHigh,
-  surfaceContainerHighest: MaterialDynamicColors.surfaceContainerHighest,
-  onSurface: MaterialDynamicColors.onSurface,
-  surfaceVariant: MaterialDynamicColors.surfaceVariant,
-  onSurfaceVariant: MaterialDynamicColors.onSurfaceVariant,
-  inverseSurface: MaterialDynamicColors.inverseSurface,
-  inverseOnSurface: MaterialDynamicColors.inverseOnSurface,
-  outline: MaterialDynamicColors.outline,
-  outlineVariant: MaterialDynamicColors.outlineVariant,
-  shadow: MaterialDynamicColors.shadow,
-  scrim: MaterialDynamicColors.scrim,
-  surfaceTint: MaterialDynamicColors.surfaceTint,
-  primary: MaterialDynamicColors.primary,
-  onPrimary: MaterialDynamicColors.onPrimary,
-  primaryContainer: MaterialDynamicColors.primaryContainer,
-  onPrimaryContainer: MaterialDynamicColors.onPrimaryContainer,
-  inversePrimary: MaterialDynamicColors.inversePrimary,
-  secondary: MaterialDynamicColors.secondary,
-  onSecondary: MaterialDynamicColors.onSecondary,
-  secondaryContainer: MaterialDynamicColors.secondaryContainer,
-  onSecondaryContainer: MaterialDynamicColors.onSecondaryContainer,
-  tertiary: MaterialDynamicColors.tertiary,
-  onTertiary: MaterialDynamicColors.onTertiary,
-  tertiaryContainer: MaterialDynamicColors.tertiaryContainer,
-  onTertiaryContainer: MaterialDynamicColors.onTertiaryContainer,
-  error: MaterialDynamicColors.error,
-  onError: MaterialDynamicColors.onError,
-  errorContainer: MaterialDynamicColors.errorContainer,
-  onErrorContainer: MaterialDynamicColors.onErrorContainer,
-  primaryFixed: MaterialDynamicColors.primaryFixed,
-  primaryFixedDim: MaterialDynamicColors.primaryFixedDim,
-  onPrimaryFixed: MaterialDynamicColors.onPrimaryFixed,
-  onPrimaryFixedVariant: MaterialDynamicColors.onPrimaryFixedVariant,
-  secondaryFixed: MaterialDynamicColors.secondaryFixed,
-  secondaryFixedDim: MaterialDynamicColors.secondaryFixedDim,
-  onSecondaryFixed: MaterialDynamicColors.onSecondaryFixed,
-  onSecondaryFixedVariant: MaterialDynamicColors.onSecondaryFixedVariant,
-  tertiaryFixed: MaterialDynamicColors.tertiaryFixed,
-  tertiaryFixedDim: MaterialDynamicColors.tertiaryFixedDim,
-  onTertiaryFixed: MaterialDynamicColors.onTertiaryFixed,
-  onTertiaryFixedVariant: MaterialDynamicColors.onTertiaryFixedVariant,
-};
-type TMaterialColors = Record<keyof typeof materialColors, string>;
+
+type TMaterialColors = Record<keyof typeof MaterialColors, string>;
 
 export enum EMaterialContrastLevel {
   Reduced = -1.0,
@@ -123,7 +64,7 @@ export class MaterialDynamicColorGenerator {
       options.contrastLevel ?? EMaterialContrastLevel.Default
     );
     const theme: Record<string, string> = {};
-    for (const [key, value] of Object.entries(materialColors)) {
+    for (const [key, value] of Object.entries(MaterialColors)) {
       theme[key] = hexFromArgb(value.getArgb(scheme));
     }
     return theme as TMaterialColors;
@@ -131,7 +72,7 @@ export class MaterialDynamicColorGenerator {
 
   public static GenerateByScheme(scheme: DynamicScheme): TMaterialColors {
     const theme: Record<string, string> = {};
-    for (const [key, value] of Object.entries(materialColors)) {
+    for (const [key, value] of Object.entries(MaterialColors)) {
       theme[key] = hexFromArgb(value.getArgb(scheme));
     }
     return theme as TMaterialColors;
