@@ -13,13 +13,16 @@
     "tokens"
   ],
   "type": "module",
-  "main": "./dist/src/index.js",
+  "main": "./build/src/index.js",
   "exports": {
-    "default": "./dist/src/*.js"
+    ".": {
+      "default": "./build/src/*.js"
+    }
   },
   "files": [
-    "./dist/**/*"
+    "./build/**/*"
   ],
+  "types": "./build/src/index.d.ts",
   "scripts": {
     "lint": "gts lint",
     "clean": "gts clean",
