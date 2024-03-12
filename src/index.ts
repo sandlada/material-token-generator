@@ -7,17 +7,6 @@ import {
 } from '@material/material-color-utilities';
 import { MaterialColors } from './material-colors';
 
-function toKebabCase(str: string) {
-  return str
-    .split('')
-    .map((letter, idx) => {
-      return letter.toUpperCase() === letter
-        ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}`
-        : letter;
-    })
-    .join('');
-}
-
 /**
  *
  * MaterialSchemaGenerator can create a group of material schema tokens(P, S, T, E, N, NV),
