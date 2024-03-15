@@ -4,7 +4,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
   "description": "Use the @material/material-color-utilities tool to create a set of tokens based on material design.",
   "keywords": [
     "color",

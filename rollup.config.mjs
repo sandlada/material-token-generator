@@ -1,4 +1,4 @@
-import {nodeResolve} from '@rollup/plugin-node-resolve';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 // rollup.config.mjs
@@ -14,5 +14,5 @@ export default {
       format: 'es',
     },
   ],
-  plugins: [nodeResolve(), typescript({tsconfig: './tsconfig.json'})],
+  plugins: [nodeResolve(), typescript({ tsconfig: './tsconfig.json' })],
 };
