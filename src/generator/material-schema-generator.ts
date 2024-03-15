@@ -1,15 +1,14 @@
 import {
-  SchemeContent,
   Hct,
   hexFromArgb,
-  DynamicScheme,
   SchemeTonalSpot,
-  argbFromHex,
-  argbFromRgba,
-  argbFromRgb,
 } from '@material/material-color-utilities';
-import {MaterialColors, type TMaterialColors} from './material-colors';
-import {ToKebabCase} from './strings';
+import { TColor } from '../color/material-colors';
+import { FromColorStringToInt } from '../utils/strings';
+import {
+  EMaterialColorContrastLevel,
+  TMaterialColorContrastLevel,
+} from '../color/contrast';
 
 /**
  *
@@ -26,15 +25,7 @@ import {ToKebabCase} from './strings';
  *
  */
 
-export type TMaterialColorContrastLevel = -1.0 | 0 | 0.5 | 1.0;
-export const enum EMaterialColorContrastLevel {
-  Reduced = -1.0,
-  Default = 0,
-  Medium = 0.5,
-  High = 1.0,
-}
-
-interface IMaterialTokensGeneratorOptions {
+interface IMaterialSchemaGeneratorOptions {
   isDark: boolean;
   contrastLevel: number | TMaterialColorContrastLevel;
 }
@@ -132,91 +123,24 @@ export type TMaterialSchemas = {
   };
 };
 
-type THexColor = `#${string}`;
-type TRgbColor = `rgb(${number}, ${number}, ${number})`;
-type TRgbaColor = `rgb(${number}, ${number}, ${number}, ${number})`;
-type TColor = THexColor | TRgbColor | TRgbaColor;
-export const enum EColorType {
-  Hex = 'hex',
-  Rgb = 'rgb',
-  Rgba = 'rgba',
-}
-
-function FromColorStringToInt(sourceColor: string): number {
-  if (sourceColor.includes('#')) {
-    return argbFromHex(sourceColor);
-  } else if (sourceColor.includes('rgba(')) {
-    const rgb = (
-      sourceColor
-        .replace('rgba(', '')
-        .replace(')', '')
-        .split(',') as Array<string>
-    ).map(s => parseInt(s));
-    return argbFromRgba({r: rgb[0], g: rgb[1], b: rgb[2], a: rgb[3]});
-  } else if (sourceColor.includes('rgb(')) {
-    const rgb = (
-      sourceColor
-        .replace('rgba(', '')
-        .replace(')', '')
-        .split(',') as Array<string>
-    ).map(s => parseInt(s));
-    return argbFromRgb(rgb[0], rgb[1], rgb[2]);
-  }
-  throw new Error('The param [sourceColor] is not a color code.');
-}
-
-export class MaterialTokensGenerator {
-  /**
-   * @param options {sourceColor, isDark, contrastLevel}, [sourceColor] is required
-   * @returns TMaterialColors
-   */
-  public static GenerateBySourceColor(
-    sourceColor: TColor,
-    options?: Partial<IMaterialTokensGeneratorOptions>
-  ): TMaterialColors {
-    const color = FromColorStringToInt(sourceColor);
-    const scheme = new SchemeContent(
-      Hct.fromInt(color),
-      options?.isDark ?? false,
-      options?.contrastLevel ?? EMaterialColorContrastLevel.Default
-    );
-    const theme: Record<string, string> = {};
-    for (const [key, value] of Object.entries(MaterialColors)) {
-      theme[key] = hexFromArgb(value.getArgb(scheme));
-    }
-    return theme as TMaterialColors;
-  }
-
-  public static GenerateByScheme(scheme: DynamicScheme): TMaterialColors {
-    const theme: Record<string, string> = {};
-    for (const [key, value] of Object.entries(MaterialColors)) {
-      theme[key] = hexFromArgb(value.getArgb(scheme));
-    }
-    return theme as TMaterialColors;
-  }
-
-  public static ToStyleText(theme: TMaterialColors) {
-    return Object.entries(theme)
-      .map(e => `--md-sys-color-${ToKebabCase(e[0])}: ${e[1]};`)
-      .reduce((l, c) => l + c);
-  }
-}
-
-export class MaterialSchemaTokensGenerator {
+export class MaterialSchemaGenerator {
   private static readonly cl = [
     0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100,
   ];
+
   public static GenerateBySourceColor(
     sourceColor: TColor,
-    options: Partial<IMaterialTokensGeneratorOptions> & {
-      cl: Array<number>;
-    }
-  ) {
+    options?: Partial<
+      IMaterialSchemaGeneratorOptions & {
+        cl: Array<number>;
+      }
+    >
+  ): TMaterialSchemas {
     const color = FromColorStringToInt(sourceColor);
     const scheme = new SchemeTonalSpot(
       Hct.fromInt(color),
-      options.isDark ?? false,
-      options.contrastLevel ?? EMaterialColorContrastLevel.Default
+      options?.isDark ?? false,
+      options?.contrastLevel ?? EMaterialColorContrastLevel.Default
     );
 
     const r = {
@@ -228,7 +152,7 @@ export class MaterialSchemaTokensGenerator {
       neutralVariant: {},
     } as Record<string, Record<string, string>>;
 
-    for (const l of options.cl ?? this.cl) {
+    for (const l of options?.cl ?? this.cl) {
       r.primary[`P${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
       r.secondary[`S${l}`] = hexFromArgb(scheme.secondaryPalette.tone(l));
       r.tertiary[`T${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
@@ -240,5 +164,25 @@ export class MaterialSchemaTokensGenerator {
     }
 
     return r as TMaterialSchemas;
+  }
+
+  public static ToStyleText(
+    schema: TMaterialSchemas,
+    options?: {
+      prefix: string;
+    }
+  ): string {
+    return Object.entries(schema).map(e => Object.entries(e[1]).map(i => {
+      const isNpV = i[0][1] === 'V';
+      if (isNpV) {
+        return `--${options?.prefix ?? 'md-sys-palette'}-${i[0]
+          .slice(0, 2)
+          .toLowerCase()}-${i[0].slice(2)}: ${i[1]};`;
+      } else {
+        return `--${options?.prefix ?? 'md-sys-palette'
+          }-${i[0][0].toLowerCase()}-${i[0].slice(1)}: ${i[1]};`;
+      }
+    }).reduce((p, c) => p + c)
+    ).reduce((p, c) => p + c)
   }
 }
