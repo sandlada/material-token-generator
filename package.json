@@ -1,6 +1,6 @@
 {
   "name": "@glare-labs/material-tokens-generator",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publishConfig": {
     "access": "public"
   },
@@ -29,7 +29,7 @@
     "./*": {
       "import": "./*.js",
       "require": "./*.js",
-      "types": "./index.d.ts",
+      "types": "./build/index.d.ts",
       "default": "./*.js"
     }
   },
