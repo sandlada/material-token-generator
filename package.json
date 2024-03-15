@@ -1,6 +1,6 @@
 {
   "name": "@glare-labs/material-tokens-generator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publishConfig": {
     "access": "public"
   },
@@ -20,10 +20,18 @@
     "build/**/*"
   ],
   "exports": {
-    "import": "./build/index.esm.js",
-    "require": "./build/index.cjs.js",
-    "types": "./build/index.d.ts",
-    "default": "./build/index.esm.js"
+    ".": {
+      "import": "./build/index.esm.js",
+      "require": "./build/index.cjs.js",
+      "types": "./build/index.d.ts",
+      "default": "./build/index.esm.js"
+    },
+    "./*": {
+      "import": "./*.js",
+      "require": "./*.js",
+      "types": "./index.d.ts",
+      "default": "./*.js"
+    }
   },
   "types": "/build/index.d.ts",
   "scripts": {
