@@ -3,12 +3,15 @@ import {
   hexFromArgb,
   SchemeTonalSpot,
 } from '@material/material-color-utilities';
-import { TColor } from '../color/material-colors';
-import { FromColorStringToInt } from '../utils/strings';
+import {EMaterialColorContrastLevel} from '../color/contrast';
+import {TColor, TMaterialColors} from '../color/material-colors';
+import {FromColorStringToInt} from '../utils/strings';
 import {
-  EMaterialColorContrastLevel,
-  TMaterialColorContrastLevel,
-} from '../color/contrast';
+  IMaterialGenerator,
+  TMaterialGeneratorOptions,
+} from './IMaterialGenerator';
+import {IStylizable, TStylizableOptions} from './IStylizable';
+import {ISingletonable} from './ISingletonable';
 
 /**
  *
@@ -24,11 +27,6 @@ import {
  *      shadow -> MaterialDynamicColors.shadow -> N0 -> #000000 -> --md-sys-color-shadow: #000000;
  *
  */
-
-interface IMaterialSchemaGeneratorOptions {
-  isDark: boolean;
-  contrastLevel: number | TMaterialColorContrastLevel;
-}
 
 export type TMaterialSchemas = {
   primary: {
@@ -123,18 +121,61 @@ export type TMaterialSchemas = {
   };
 };
 
-export class MaterialSchemaGenerator {
+class CMaterialSchemasGenerator
+  implements
+    IMaterialGenerator<
+      TMaterialGeneratorOptions & {cl: Array<number>},
+      TMaterialSchemas
+    >,
+    IStylizable<TMaterialSchemas>,
+    ISingletonable
+{
   private static readonly cl = [
     0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100,
   ];
 
-  public static GenerateBySourceColor(
+  private static Instance: CMaterialSchemasGenerator | null = null;
+
+  private constructor() {}
+
+  public static GetInstance() {
+    if (this.Instance === null) this.Instance = new CMaterialSchemasGenerator();
+    return this.Instance;
+  }
+
+  public get value() {
+    return CMaterialSchemasGenerator.GetInstance();
+  }
+
+  ToStyleText(
+    object: TMaterialSchemas,
+    options?: Partial<TStylizableOptions> | undefined
+  ): string {
+    return Object.entries(object)
+      .map(e =>
+        Object.entries(e[1])
+          .map(i => {
+            const isNpV = i[0][1] === 'V';
+            if (isNpV) {
+              return `--${options?.prefix ?? 'md-sys-palette'}-${i[0]
+                .slice(0, 2)
+                .toLowerCase()}-${i[0].slice(2)}: ${i[1]};`;
+            } else {
+              return `--${
+                options?.prefix ?? 'md-sys-palette'
+              }-${i[0][0].toLowerCase()}-${i[0].slice(1)}: ${i[1]};`;
+            }
+          })
+          .reduce((p, c) => p + c)
+      )
+      .reduce((p, c) => p + c);
+  }
+
+  GenerateBySourceColor(
     sourceColor: TColor,
-    options?: Partial<
-      IMaterialSchemaGeneratorOptions & {
-        cl: Array<number>;
-      }
-    >
+    options?:
+      | Partial<TMaterialGeneratorOptions & {cl: Array<number>}>
+      | undefined
   ): TMaterialSchemas {
     const color = FromColorStringToInt(sourceColor);
     const scheme = new SchemeTonalSpot(
@@ -152,7 +193,7 @@ export class MaterialSchemaGenerator {
       neutralVariant: {},
     } as Record<string, Record<string, string>>;
 
-    for (const l of options?.cl ?? this.cl) {
+    for (const l of options?.cl ?? CMaterialSchemasGenerator.cl) {
       r.primary[`P${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
       r.secondary[`S${l}`] = hexFromArgb(scheme.secondaryPalette.tone(l));
       r.tertiary[`T${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
@@ -165,24 +206,25 @@ export class MaterialSchemaGenerator {
 
     return r as TMaterialSchemas;
   }
+}
+
+export class MaterialSchemasGenerator {
+  public static GenerateBySourceColor(
+    sourceColor: TColor,
+    options?:
+      | Partial<TMaterialGeneratorOptions & {cl: Array<number>}>
+      | undefined
+  ) {
+    return CMaterialSchemasGenerator.GetInstance().GenerateBySourceColor(
+      sourceColor,
+      options
+    );
+  }
 
   public static ToStyleText(
-    schema: TMaterialSchemas,
-    options?: {
-      prefix: string;
-    }
-  ): string {
-    return Object.entries(schema).map(e => Object.entries(e[1]).map(i => {
-      const isNpV = i[0][1] === 'V';
-      if (isNpV) {
-        return `--${options?.prefix ?? 'md-sys-palette'}-${i[0]
-          .slice(0, 2)
-          .toLowerCase()}-${i[0].slice(2)}: ${i[1]};`;
-      } else {
-        return `--${options?.prefix ?? 'md-sys-palette'
-          }-${i[0][0].toLowerCase()}-${i[0].slice(1)}: ${i[1]};`;
-      }
-    }).reduce((p, c) => p + c)
-    ).reduce((p, c) => p + c)
+    object: TMaterialSchemas,
+    options?: Partial<TStylizableOptions> | undefined
+  ) {
+    return CMaterialSchemasGenerator.GetInstance().ToStyleText(object, options);
   }
 }

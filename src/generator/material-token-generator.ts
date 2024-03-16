@@ -1,33 +1,59 @@
 import {
-  SchemeContent,
-  Hct,
-  hexFromArgb,
   DynamicScheme,
+  Hct,
+  SchemeContent,
+  hexFromArgb,
 } from '@material/material-color-utilities';
-import {
-  EMaterialColorContrastLevel,
-  TMaterialColorContrastLevel,
-} from '../color/contrast';
+import {EMaterialColorContrastLevel} from '../color/contrast';
 import {
   MaterialColors,
   TColor,
   TMaterialColors,
 } from '../color/material-colors';
 import {FromColorStringToInt, ToKebabCase} from '../utils/strings';
+import {
+  IMaterialGenerator,
+  TMaterialGeneratorOptions,
+} from './IMaterialGenerator';
+import {IStylizable, TStylizableOptions} from './IStylizable';
+import {ISingletonable} from './ISingletonable';
 
-interface IMaterialTokensGeneratorOptions {
-  isDark: boolean;
-  contrastLevel: number | TMaterialColorContrastLevel;
-}
+class CMaterialTokensGenerator
+  implements
+    IMaterialGenerator<TMaterialGeneratorOptions, TMaterialColors>,
+    IStylizable<TMaterialColors>,
+    ISingletonable
+{
+  private static Instance: CMaterialTokensGenerator | null = null;
 
-export class MaterialTokenGenerator {
-  /**
-   * @param options {sourceColor, isDark, contrastLevel}, [sourceColor] is required
-   * @returns TMaterialColors
-   */
-  public static GenerateBySourceColor(
+  private constructor() {}
+
+  public static GetInstance() {
+    if (this.Instance === null) this.Instance = new CMaterialTokensGenerator();
+    return this.Instance;
+  }
+
+  public get value(): CMaterialTokensGenerator {
+    return CMaterialTokensGenerator.GetInstance();
+  }
+
+  public ToStyleText(
+    object: TMaterialColors,
+    options?: Partial<TStylizableOptions> | undefined
+  ): string {
+    return Object.entries(object)
+      .map(
+        e =>
+          `--${options?.prefix ?? 'md-sys-color'}-${ToKebabCase(e[0])}: ${
+            e[1]
+          };`
+      )
+      .reduce((l, c) => l + c);
+  }
+
+  public GenerateBySourceColor(
     sourceColor: TColor,
-    options?: Partial<IMaterialTokensGeneratorOptions>
+    options?: Partial<TMaterialGeneratorOptions>
   ): TMaterialColors {
     const color = FromColorStringToInt(sourceColor);
     const scheme = new SchemeContent(
@@ -42,27 +68,34 @@ export class MaterialTokenGenerator {
     return theme as TMaterialColors;
   }
 
-  public static GenerateByScheme(scheme: DynamicScheme): TMaterialColors {
+  public GenerateByScheme(scheme: DynamicScheme): TMaterialColors {
     const theme: Record<string, string> = {};
     for (const [key, value] of Object.entries(MaterialColors)) {
       theme[key] = hexFromArgb(value.getArgb(scheme));
     }
     return theme as TMaterialColors;
   }
+}
+
+export class MaterialTokensGenerator {
+  public static GenerateBySourceColor(
+    sourceColor: TColor,
+    options?: Partial<TMaterialGeneratorOptions>
+  ) {
+    return CMaterialTokensGenerator.GetInstance().GenerateBySourceColor(
+      sourceColor,
+      options
+    );
+  }
 
   public static ToStyleText(
-    theme: TMaterialColors,
-    options?: {
-      prefix: string;
-    }
+    object: TMaterialColors,
+    options?: Partial<TStylizableOptions> | undefined
   ) {
-    return Object.entries(theme)
-      .map(
-        e =>
-          `--${options?.prefix ?? 'md-sys-color'}-${ToKebabCase(e[0])}: ${
-            e[1]
-          };`
-      )
-      .reduce((l, c) => l + c);
+    return CMaterialTokensGenerator.GetInstance().ToStyleText(object, options);
+  }
+
+  public static GenerateByScheme(scheme: DynamicScheme) {
+    return CMaterialTokensGenerator.GetInstance().GenerateByScheme(scheme);
   }
 }
