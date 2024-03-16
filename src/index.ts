@@ -1,3 +1,3 @@
-export * from './generator/material-token-generator';
-export * from './generator/material-schema-generator';
+export * from './generator/MaterialDynamicSchemeGenerator';
+export * from './generator/MaterialPaletteGenerator';
 export * from './color/default-colors';
