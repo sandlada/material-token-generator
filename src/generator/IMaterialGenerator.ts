@@ -1,3 +1,4 @@
+import {TMaterialContrastLevel} from '../color/contrast';
 import {TColor} from '../color/material-colors';
 
 export type TVariant = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -15,7 +16,7 @@ export const enum EVariant {
 
 export type TMaterialGeneratorOptions = {
   isDark: boolean;
-  contrastLevel: number | TMaterialColorContrastLevel;
+  contrastLevel: number | TMaterialContrastLevel;
   primaryPalette: TColor;
   secondaryPalette: TColor;
   tertiaryPalette: TColor;

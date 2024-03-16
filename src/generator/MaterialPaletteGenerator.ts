@@ -3,7 +3,7 @@ import {
   hexFromArgb,
   TonalPalette,
 } from '@material/material-color-utilities';
-import {EMaterialColorContrastLevel} from '../color/contrast';
+import {EMaterialContrastLevel} from '../color/contrast';
 import {TColor} from '../color/material-colors';
 import {FromColorStringToInt} from '../utils/strings';
 import {
@@ -214,8 +214,7 @@ class CMaterialPaletteGenerator
       neutralPalette: colors.neutralPalette,
       neutralVariantPalette: colors.neutralVariantPalette,
       isDark: options?.isDark ?? false,
-      contrastLevel:
-        options?.contrastLevel ?? EMaterialColorContrastLevel.Default,
+      contrastLevel: options?.contrastLevel ?? EMaterialContrastLevel.Default,
       // @ts-ignore
       variant: options?.variant ?? EVariant.NEUTRAL,
     });
