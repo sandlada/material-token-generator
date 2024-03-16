@@ -1,12 +1,15 @@
 import {
+  DynamicScheme,
   Hct,
   hexFromArgb,
   SchemeTonalSpot,
+  TonalPalette,
 } from '@material/material-color-utilities';
 import {EMaterialColorContrastLevel} from '../color/contrast';
 import {TColor} from '../color/material-colors';
 import {FromColorStringToInt} from '../utils/strings';
 import {
+  EVariant,
   IMaterialGenerator,
   TMaterialGeneratorOptions,
 } from './IMaterialGenerator';
@@ -122,7 +125,7 @@ export type TMaterialSchemas = {
   };
 };
 
-class CMaterialSchemasGenerator
+class CMaterialPaletteGenerator
   extends ACssLocalStorage
   implements
     IMaterialGenerator<
@@ -136,19 +139,19 @@ class CMaterialSchemasGenerator
     0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100,
   ];
 
-  private static Instance: CMaterialSchemasGenerator | null = null;
+  private static Instance: CMaterialPaletteGenerator | null = null;
 
   private constructor() {
     super();
   }
 
   public static GetInstance() {
-    if (this.Instance === null) this.Instance = new CMaterialSchemasGenerator();
+    if (this.Instance === null) this.Instance = new CMaterialPaletteGenerator();
     return this.Instance;
   }
 
   public get value() {
-    return CMaterialSchemasGenerator.GetInstance();
+    return CMaterialPaletteGenerator.GetInstance();
   }
 
   ToStyleText(
@@ -181,12 +184,47 @@ class CMaterialSchemasGenerator
       | Partial<TMaterialGeneratorOptions & {cl: Array<number>}>
       | undefined
   ): TMaterialSchemas {
-    const color = FromColorStringToInt(sourceColor);
-    const scheme = new SchemeTonalSpot(
-      Hct.fromInt(color),
-      options?.isDark ?? false,
-      options?.contrastLevel ?? EMaterialColorContrastLevel.Default
-    );
+    const colors = {
+      sourceColor: FromColorStringToInt(sourceColor),
+      primaryPalette: TonalPalette.fromInt(
+        options?.primaryPalette
+          ? FromColorStringToInt(options.primaryPalette)
+          : 0xffeb0057
+      ),
+      secondaryPalette: TonalPalette.fromInt(
+        options?.secondaryPalette
+          ? FromColorStringToInt(options.secondaryPalette)
+          : 0xfff46b00
+      ),
+      tertiaryPalette: TonalPalette.fromInt(
+        options?.tertiaryPalette
+          ? FromColorStringToInt(options.tertiaryPalette)
+          : 0xff00ab46
+      ),
+      neutralPalette: TonalPalette.fromInt(
+        options?.neutralPalette
+          ? FromColorStringToInt(options.neutralPalette)
+          : 0xff949494
+      ),
+      neutralVariantPalette: TonalPalette.fromInt(
+        options?.neutralVariantPalette
+          ? FromColorStringToInt(options.neutralVariantPalette)
+          : 0xffbc8877
+      ),
+    };
+    const scheme = new DynamicScheme({
+      sourceColorArgb: colors.sourceColor,
+      primaryPalette: colors.primaryPalette,
+      secondaryPalette: colors.secondaryPalette,
+      tertiaryPalette: colors.tertiaryPalette,
+      neutralPalette: colors.neutralPalette,
+      neutralVariantPalette: colors.neutralVariantPalette,
+      isDark: options?.isDark ?? false,
+      contrastLevel:
+        options?.contrastLevel ?? EMaterialColorContrastLevel.Default,
+      // @ts-ignore
+      variant: options?.variant ?? EVariant.NEUTRAL,
+    });
 
     const r = {
       primary: {},
@@ -197,7 +235,7 @@ class CMaterialSchemasGenerator
       neutralVariant: {},
     } as Record<string, Record<string, string>>;
 
-    for (const l of options?.cl ?? CMaterialSchemasGenerator.cl) {
+    for (const l of options?.cl ?? CMaterialPaletteGenerator.cl) {
       r.primary[`P${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
       r.secondary[`S${l}`] = hexFromArgb(scheme.secondaryPalette.tone(l));
       r.tertiary[`T${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
@@ -212,14 +250,14 @@ class CMaterialSchemasGenerator
   }
 }
 
-export class MaterialSchemasGenerator {
+export class MaterialPaletteGenerator {
   public static GenerateBySourceColor(
     sourceColor: TColor,
     options?:
       | Partial<TMaterialGeneratorOptions & {cl: Array<number>}>
       | undefined
   ) {
-    return CMaterialSchemasGenerator.GetInstance().GenerateBySourceColor(
+    return CMaterialPaletteGenerator.GetInstance().GenerateBySourceColor(
       sourceColor,
       options
     );
@@ -229,11 +267,11 @@ export class MaterialSchemasGenerator {
     object: TMaterialSchemas,
     options?: Partial<TStylizableOptions> | undefined
   ) {
-    return CMaterialSchemasGenerator.GetInstance().ToStyleText(object, options);
+    return CMaterialPaletteGenerator.GetInstance().ToStyleText(object, options);
   }
 
   public static ToCssLocalFile(fileName: string, content: string) {
-    return CMaterialSchemasGenerator.GetInstance().ToCssLocalFile(
+    return CMaterialPaletteGenerator.GetInstance().ToCssLocalFile(
       fileName,
       content
     );
