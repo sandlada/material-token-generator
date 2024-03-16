@@ -63,16 +63,3 @@ console.log(tokens);
  */
 console.log(styleText);
 ```
-
-### Generate CSS
-For example:
-
-```javascript
-import { MaterialDynamicSchemeGenerator } from '@glare-labs/material-tokens-generator';
-
-const tokens = MaterialDynamicSchemeGenerator.GenerateBySourceColor('#3f75e0');
-const styleText = MaterialDynamicSchemeGenerator.ToStyleText(tokens, {
-  prefix: 'my-prefix',
-});
-MaterialDynamicSchemeGenerator.ToCssLocalFile('targetFileName', styleText);
-```
