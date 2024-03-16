@@ -5,7 +5,6 @@
     "outDir": "build",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
     "esModuleInterop": true,
     "preserveConstEnums": true,
   },
