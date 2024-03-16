@@ -1,8 +1,6 @@
 import {
   DynamicScheme,
-  Hct,
   hexFromArgb,
-  SchemeTonalSpot,
   TonalPalette,
 } from '@material/material-color-utilities';
 import {EMaterialColorContrastLevel} from '../color/contrast';
@@ -15,7 +13,6 @@ import {
 } from './IMaterialGenerator';
 import {IStylizable, TStylizableOptions} from './IStylizable';
 import {ISingletonable} from './ISingletonable';
-import {ACssLocalStorage} from './CssLocalStorage';
 
 /**
  *
@@ -126,7 +123,6 @@ export type TMaterialSchemas = {
 };
 
 class CMaterialPaletteGenerator
-  extends ACssLocalStorage
   implements
     IMaterialGenerator<
       TMaterialGeneratorOptions & {cl: Array<number>},
@@ -141,9 +137,7 @@ class CMaterialPaletteGenerator
 
   private static Instance: CMaterialPaletteGenerator | null = null;
 
-  private constructor() {
-    super();
-  }
+  private constructor() {}
 
   public static GetInstance() {
     if (this.Instance === null) this.Instance = new CMaterialPaletteGenerator();
@@ -268,12 +262,5 @@ export class MaterialPaletteGenerator {
     options?: Partial<TStylizableOptions> | undefined
   ) {
     return CMaterialPaletteGenerator.GetInstance().ToStyleText(object, options);
-  }
-
-  public static ToCssLocalFile(fileName: string, content: string) {
-    return CMaterialPaletteGenerator.GetInstance().ToCssLocalFile(
-      fileName,
-      content
-    );
   }
 }

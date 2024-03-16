@@ -17,10 +17,8 @@ import {
 } from './IMaterialGenerator';
 import {IStylizable, TStylizableOptions} from './IStylizable';
 import {ISingletonable} from './ISingletonable';
-import {ACssLocalStorage} from './CssLocalStorage';
 
 class CMaterialDynamicSchemeGenerator
-  extends ACssLocalStorage
   implements
     IMaterialGenerator<TMaterialGeneratorOptions, TMaterialColors>,
     IStylizable<TMaterialColors>,
@@ -28,9 +26,7 @@ class CMaterialDynamicSchemeGenerator
 {
   private static Instance: CMaterialDynamicSchemeGenerator | null = null;
 
-  private constructor() {
-    super();
-  }
+  private constructor() {}
 
   public static GetInstance() {
     if (this.Instance === null)
@@ -127,13 +123,6 @@ export class MaterialDynamicSchemeGenerator {
     return CMaterialDynamicSchemeGenerator.GetInstance().ToStyleText(
       object,
       options
-    );
-  }
-
-  public static ToCssLocalFile(fileName: string, content: string) {
-    return CMaterialDynamicSchemeGenerator.GetInstance().ToCssLocalFile(
-      fileName,
-      content
     );
   }
 }
