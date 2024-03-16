@@ -17,8 +17,10 @@ import {
 } from './IMaterialGenerator';
 import {IStylizable, TStylizableOptions} from './IStylizable';
 import {ISingletonable} from './ISingletonable';
+import {ACssLocalStorage} from './CssLocalStorage';
 
 class CMaterialTokensGenerator
+  extends ACssLocalStorage
   implements
     IMaterialGenerator<TMaterialGeneratorOptions, TMaterialColors>,
     IStylizable<TMaterialColors>,
@@ -26,7 +28,9 @@ class CMaterialTokensGenerator
 {
   private static Instance: CMaterialTokensGenerator | null = null;
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   public static GetInstance() {
     if (this.Instance === null) this.Instance = new CMaterialTokensGenerator();
@@ -97,5 +101,12 @@ export class MaterialTokensGenerator {
 
   public static GenerateByScheme(scheme: DynamicScheme) {
     return CMaterialTokensGenerator.GetInstance().GenerateByScheme(scheme);
+  }
+
+  public static ToCssLocalFile(fileName: string, content: string) {
+    return CMaterialTokensGenerator.GetInstance().ToCssLocalFile(
+      fileName,
+      content
+    );
   }
 }

@@ -4,7 +4,7 @@ import {
   SchemeTonalSpot,
 } from '@material/material-color-utilities';
 import {EMaterialColorContrastLevel} from '../color/contrast';
-import {TColor, TMaterialColors} from '../color/material-colors';
+import {TColor} from '../color/material-colors';
 import {FromColorStringToInt} from '../utils/strings';
 import {
   IMaterialGenerator,
@@ -12,6 +12,7 @@ import {
 } from './IMaterialGenerator';
 import {IStylizable, TStylizableOptions} from './IStylizable';
 import {ISingletonable} from './ISingletonable';
+import {ACssLocalStorage} from './CssLocalStorage';
 
 /**
  *
@@ -122,6 +123,7 @@ export type TMaterialSchemas = {
 };
 
 class CMaterialSchemasGenerator
+  extends ACssLocalStorage
   implements
     IMaterialGenerator<
       TMaterialGeneratorOptions & {cl: Array<number>},
@@ -136,7 +138,9 @@ class CMaterialSchemasGenerator
 
   private static Instance: CMaterialSchemasGenerator | null = null;
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   public static GetInstance() {
     if (this.Instance === null) this.Instance = new CMaterialSchemasGenerator();
@@ -226,5 +230,12 @@ export class MaterialSchemasGenerator {
     options?: Partial<TStylizableOptions> | undefined
   ) {
     return CMaterialSchemasGenerator.GetInstance().ToStyleText(object, options);
+  }
+
+  public static ToCssLocalFile(fileName: string, content: string) {
+    return CMaterialSchemasGenerator.GetInstance().ToCssLocalFile(
+      fileName,
+      content
+    );
   }
 }
