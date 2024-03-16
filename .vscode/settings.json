@@ -1,5 +1,12 @@
 {
-    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "always",
+        "source.organizeImports": "never",
+    },
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
     "eslint.format.enable": true,
     "files.encoding": "utf8",
 }
