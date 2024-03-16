@@ -8,58 +8,71 @@ This warehouse uses the [@material/material-color-utilities](https://github.com/
 
 ## Usage
 
+### Import
+If you are using **ESM**, you can try the introduction part of the following code:
+```javascript
+import { MaterialDynamicSchemeGenerator, MaterialPaletteGenerator } from '@glare-labs/material-tokens-generator';
+```
+
+Or: 
+```javascript
+import { MaterialDynamicSchemeGenerator, MaterialPaletteGenerator } from '@glare-labs/material-tokens-generator/build/index.esm';
+```
+
+
+If you are using **CommonJs**, you can try the introduction part of the following code:
+```javascript
+const { MaterialDynamicSchemeGenerator, MaterialPaletteGenerator } = require('@glare-labs/material-tokens-generator');
+```
+
+Or: 
+```javascript
+const { MaterialDynamicSchemeGenerator, MaterialPaletteGenerator } = require('@glare-labs/material-tokens-generator/build/index.cjs');
+```
+
+### Generate colors
 For example: 
 
 ```javascript
-import { MaterialTokenGenerator, MaterialSchemaGenerator } from '@glare-labs/material-tokens-generator';
+import { MaterialDynamicSchemeGenerator } from '@glare-labs/material-tokens-generator';
 
-const tokens = MaterialTokenGenerator.GenerateBySourceColor('rgba(111,12,133, 0.2)')
-const styleText = MaterialTokenGenerator.ToStyleText(
-    tokens,
-    {
-        prefix: 'my-prefix'
-    }
-);
+const tokens = MaterialDynamicSchemeGenerator.GenerateBySourceColor('#3f75e0');
+const styleText = MaterialDynamicSchemeGenerator.ToStyleText(tokens, {
+  prefix: 'my-prefix',
+});
 
 /**
  * @output
  * {
- *   primaryPaletteKeyColor: '#ad50c0',
- *   secondaryPaletteKeyColor: '#936998',
+ *   primaryPaletteKeyColor: '#eb0057',
+ *   secondaryPaletteKeyColor: '#f46b00',
  *   ...
- *   onTertiaryFixed: '#3e001d',
- *   onTertiaryFixedVariant: '#89114a'
+ *   onTertiaryFixed: '#002108',
+ *   onTertiaryFixedVariant: '#00531e'
  * }
  */
 console.log(tokens);
 
 /**
  * @output
- * --my-prefix-primary-palette-key-color: #ad50c0;
- * --my-prefix-secondary-palette-key-color: #936998;
+ * --my-prefix-primary-palette-key-color: #eb0057;
+ * --my-prefix-secondary-palette-key-color: #f46b00;
  * ...
- * --my-prefix-on-tertiary-fixed: #3e001d;
- * --my-prefix-on-tertiary-fixed-variant: #89114a;
+ * --my-prefix-on-tertiary-fixed: #002108;
+ * --my-prefix-on-tertiary-fixed-variant: #00531e;
  */
 console.log(styleText);
 ```
-If you are using **ESM**, you can try the introduction part of the following code:
-```javascript
-import { MaterialTokenGenerator, MaterialSchemaGenerator } from '@glare-labs/material-tokens-generator';
-```
 
-Or: 
-```javascript
-import { MaterialTokenGenerator, MaterialSchemaGenerator } from '@glare-labs/material-tokens-generator/build/index.esm';
-```
+### Generate CSS
+For example:
 
-
-If you are using **CommonJs**, you can try the introduction part of the following code:
 ```javascript
-const { MaterialTokenGenerator, MaterialSchemaGenerator } = require('@glare-labs/material-tokens-generator');
-```
+import { MaterialDynamicSchemeGenerator } from '@glare-labs/material-tokens-generator';
 
-Or: 
-```javascript
-const { MaterialTokenGenerator, MaterialSchemaGenerator } = require('@glare-labs/material-tokens-generator/build/index.cjs');
+const tokens = MaterialDynamicSchemeGenerator.GenerateBySourceColor('#3f75e0');
+const styleText = MaterialDynamicSchemeGenerator.ToStyleText(tokens, {
+  prefix: 'my-prefix',
+});
+MaterialDynamicSchemeGenerator.ToCssLocalFile('targetFileName', styleText);
 ```
