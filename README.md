@@ -139,11 +139,11 @@ MaterialDynamicSchemeGenerator.GenerateByVariant('#123456', {
 |options|0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6|variant|No|
 |options|boolean|isDark|No|
 |options|-1.0 \| 0 \| 0.5 \| 1.0|contrastLevel|No|
-|options|string|primaryKeyPalette|No|
-|options|string|secondaryKeyPalette|No|
-|options|string|tertiaryKeyPalette|No|
-|options|string|neutralKeyPalette|No|
-|options|string|neutralVariantKeyPalette|No|
+|options|string|primaryPalette|No|
+|options|string|secondaryPalette|No|
+|options|string|tertiaryPalette|No|
+|options|string|neutralPalette|No|
+|options|string|neutralVariantPalette|No|
 
 ```javascript
 MaterialDynamicSchemeGenerator.GenerateByPalette('#123456');
@@ -156,7 +156,7 @@ MaterialDynamicSchemeGenerator.GenerateByPalette('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
   isDark: true,
   contrastLevel: EMaterialContrastLevel.HIGH,
-  primaryKeyPalette: '#654321'
+  primaryPalette: '#654321'
 });
 ```
 
@@ -246,11 +246,11 @@ MaterialPaletteGenerator.GenerateByVariant('#123456', {
 |options|0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6|variant|No|
 |options|boolean|isDark|No|
 |options|-1.0 \| 0 \| 0.5 \| 1.0|contrastLevel|No|
-|options|string|primaryKeyPalette|No|
-|options|string|secondaryKeyPalette|No|
-|options|string|tertiaryKeyPalette|No|
-|options|string|neutralKeyPalette|No|
-|options|string|neutralVariantKeyPalette|No|
+|options|string|primaryPalette|No|
+|options|string|secondaryPalette|No|
+|options|string|tertiaryPalette|No|
+|options|string|neutralPalette|No|
+|options|string|neutralVariantPalette|No|
 |options|Array\<number>|cl|No|
 
 ```javascript
@@ -264,7 +264,7 @@ MaterialPaletteGenerator.GenerateByPalette('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
   isDark: true,
   cl: [0, 30, 60, 90, 100],
-  primaryKeyPalette: '#654321'
+  primaryPalette: '#654321'
 });
 ```
 
