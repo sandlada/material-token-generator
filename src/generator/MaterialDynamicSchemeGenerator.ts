@@ -1,5 +1,10 @@
 import {type TColor} from '../color/MaterialColors';
 import {
+  CPaletteGeneratorUsingPalette,
+  CPaletteGeneratorUsingVariant,
+  type TPaletteGeneratorClassConstructorOptions,
+} from './internal/CMaterialPalette';
+import {
   CSchemeGeneratorUsingPalette,
   CSchemeGeneratorUsingVariant,
   type TSchemeGeneratorClassConstructorOptions,
@@ -8,17 +13,44 @@ import {
 export class MaterialDynamicSchemeGenerator {
   private constructor() {}
 
-  public static GenerateByPalette = (
+  public static GenerateByPalette(
     sourceColor: TColor,
     options?: Partial<TSchemeGeneratorClassConstructorOptions>
-  ) => new CSchemeGeneratorUsingPalette(sourceColor, options);
+  ) {
+    return new CSchemeGeneratorUsingPalette(sourceColor, options);
+  }
 
-  public static GenerateByVariant = (
+  public static GenerateByVariant(
     sourceColor: TColor,
     options?: Partial<
       Pick<TSchemeGeneratorClassConstructorOptions, 'isDark'> &
         Pick<TSchemeGeneratorClassConstructorOptions, 'contrastLevel'> &
         Pick<TSchemeGeneratorClassConstructorOptions, 'variant'>
     >
-  ) => new CSchemeGeneratorUsingVariant(sourceColor, options);
+  ) {
+    return new CSchemeGeneratorUsingVariant(sourceColor, options);
+  }
+}
+
+export class MaterialPaletteGenerator {
+  private constructor() {}
+
+  public static GenerateByPalette(
+    sourceColor: TColor,
+    options?: Partial<TPaletteGeneratorClassConstructorOptions>
+  ) {
+    return new CPaletteGeneratorUsingPalette(sourceColor, options);
+  }
+
+  public static GenerateByVariant(
+    sourceColor: TColor,
+    options?: Partial<
+      Pick<TPaletteGeneratorClassConstructorOptions, 'cl'> &
+        Pick<TPaletteGeneratorClassConstructorOptions, 'isDark'> &
+        Pick<TPaletteGeneratorClassConstructorOptions, 'contrastLevel'> &
+        Pick<TPaletteGeneratorClassConstructorOptions, 'variant'>
+    >
+  ) {
+    return new CPaletteGeneratorUsingVariant(sourceColor, options);
+  }
 }

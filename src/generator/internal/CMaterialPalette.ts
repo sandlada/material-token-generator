@@ -2,6 +2,14 @@ import {
   TonalPalette,
   DynamicScheme,
   hexFromArgb,
+  SchemeMonochrome,
+  Hct,
+  SchemeContent,
+  SchemeExpressive,
+  SchemeFidelity,
+  SchemeNeutral,
+  SchemeTonalSpot,
+  SchemeVibrant,
 } from '@material/material-color-utilities';
 import {
   type TMaterialContrastLevel,
@@ -50,7 +58,7 @@ export type TPaletteGeneratorClassConstructorOptions = {
   variant: TMaterialVariant;
   cl: Array<number>;
 };
-export class CPaletteGenerator extends CAPaletteGeneratorLiteralizer {
+export class CPaletteGeneratorUsingPalette extends CAPaletteGeneratorLiteralizer {
   protected override _tokens: TMaterialPalettes;
 
   public constructor(
@@ -108,6 +116,119 @@ export class CPaletteGenerator extends CAPaletteGeneratorLiteralizer {
       variant: this.options?.variant ?? EMaterialVariant.VIBRANT,
     });
 
+    const palettes = {
+      primary: {},
+      secondary: {},
+      tertiary: {},
+      error: {},
+      neutral: {},
+      neutralVariant: {},
+    } as Record<string, Record<string, string>>;
+
+    for (const l of this.options?.cl ?? [
+      0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100,
+    ]) {
+      palettes.primary[`P${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
+      palettes.secondary[`S${l}`] = hexFromArgb(
+        scheme.secondaryPalette.tone(l)
+      );
+      palettes.tertiary[`T${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
+      palettes.error[`E${l}`] = hexFromArgb(scheme.errorPalette.tone(l));
+      palettes.neutral[`N${l}`] = hexFromArgb(scheme.neutralPalette.tone(l));
+      palettes.neutralVariant[`NV${l}`] = hexFromArgb(
+        scheme.neutralVariantPalette.tone(l)
+      );
+    }
+
+    return palettes as TMaterialPalettes;
+  }
+
+  public override value(): TMaterialPalettes {
+    return this._tokens;
+  }
+}
+
+export class CPaletteGeneratorUsingVariant extends CAPaletteGeneratorLiteralizer {
+  protected override _tokens: TMaterialPalettes;
+
+  public constructor(
+    public sourceColor: TColor,
+    public options?: Partial<
+      Pick<TPaletteGeneratorClassConstructorOptions, 'cl'> &
+        Pick<TPaletteGeneratorClassConstructorOptions, 'isDark'> &
+        Pick<TPaletteGeneratorClassConstructorOptions, 'contrastLevel'> &
+        Pick<TPaletteGeneratorClassConstructorOptions, 'variant'>
+    >
+  ) {
+    super();
+    this._tokens = this._Generate();
+  }
+
+  private _TransformColorsToInts() {
+    return {
+      sourceColor: FromColorStringToInt(this.sourceColor),
+    };
+  }
+
+  protected override _Generate() {
+    const colors = this._TransformColorsToInts();
+    let scheme = null;
+
+    switch (this.options?.variant ?? EMaterialVariant.VIBRANT) {
+      case EMaterialVariant.MONOCHROME:
+        scheme = new SchemeMonochrome(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.NEUTRAL:
+        scheme = new SchemeNeutral(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.TONAL_SPOT:
+        scheme = new SchemeTonalSpot(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.VIBRANT:
+        scheme = new SchemeVibrant(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.EXPRESSIVE:
+        scheme = new SchemeExpressive(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.FIDELITY:
+        scheme = new SchemeFidelity(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.CONTENT:
+        scheme = new SchemeContent(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      default:
+        throw new Error(
+          `Unaccepted parameter value [options.variant] [${this.options?.variant}]`
+        );
+    }
     const palettes = {
       primary: {},
       secondary: {},

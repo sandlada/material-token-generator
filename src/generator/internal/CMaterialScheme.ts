@@ -37,7 +37,9 @@ abstract class CASchemeGeneratorLiteralizer extends CAGeneratorLiteralizer<TMate
       .reduce((l, c) => l + c);
   }
 
-  public override toString = this.ToStyleText;
+  public override toString() {
+    return JSON.stringify(this._tokens);
+  }
 }
 
 export type TSchemeGeneratorClassConstructorOptions = {
