@@ -14,23 +14,35 @@
     "tokens",
     "color-tokens"
   ],
-  "main": "build/index.cjs.js",
-  "module": "build/index.esm.js",
+  "main": "build/index.cjs",
+  "module": "build/index.mjs",
   "files": [
     "build/**/*"
   ],
   "exports": {
     ".": {
-      "import": "./build/index.esm.js",
-      "require": "./build/index.cjs.js",
+      "import": "./build/index.mjs",
+      "require": "./build/index.cjs",
       "types": "./build/index.d.ts",
-      "default": "./build/index.esm.js"
+      "default": "./build/index.mjs"
+    },
+    "./esm": {
+      "import": "./build/index.mjs",
+      "require": null,
+      "types": "./build/index.d.ts",
+      "default": "./build/index.mjs"
+    },
+    "./cjs": {
+      "import": null,
+      "require": "./build/index.cjs",
+      "types": "./build/index.d.ts",
+      "default": "./build/index.cjs"
     },
     "./*": {
-      "import": "./*.js",
-      "require": "./*.js",
+      "import": "./*",
+      "require": "./*",
       "types": "./build/index.d.ts",
-      "default": "./*.js"
+      "default": "./*"
     }
   },
   "types": "/build/index.d.ts",
@@ -50,6 +62,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "20.8.2",
     "gts": "^5.2.0",
