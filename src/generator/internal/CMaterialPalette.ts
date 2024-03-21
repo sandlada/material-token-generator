@@ -14,18 +14,9 @@ import {CAGeneratorLiteralizer} from './CAGenerator';
 import type {TStylizableOptions} from './IStylizable';
 import type {TMaterialPalettes} from '../../color/MaterialPalette';
 
-abstract class CAPaletteGeneratorLiteralizer extends CAGeneratorLiteralizer<TMaterialPalettes | null> {
-  protected override tokens: TMaterialPalettes | null = null;
-  public abstract Generate(): TMaterialPalettes;
-
+abstract class CAPaletteGeneratorLiteralizer extends CAGeneratorLiteralizer<TMaterialPalettes> {
   public ToStyleText(options?: Partial<TStylizableOptions>): string {
-    if (this.tokens === null) {
-      console.warn(
-        'Please make sure to call [Generate] correctly before calling [ToStyleText].'
-      );
-      return '';
-    }
-    return Object.entries(this.tokens)
+    return Object.entries(this._tokens)
       .map(e =>
         Object.entries(e[1])
           .map(i => {
@@ -45,12 +36,10 @@ abstract class CAPaletteGeneratorLiteralizer extends CAGeneratorLiteralizer<TMat
       .reduce((p, c) => p + c);
   }
 
-  public override toString(): string {
-    return this.ToStyleText();
-  }
+  public override toString = this.ToStyleText;
 }
 
-type TPaletteGeneratorClassConstructorOptions = {
+export type TPaletteGeneratorClassConstructorOptions = {
   isDark: boolean;
   contrastLevel: number | TMaterialContrastLevel;
   primaryPalette: TColor;
@@ -62,11 +51,14 @@ type TPaletteGeneratorClassConstructorOptions = {
   cl: Array<number>;
 };
 export class CPaletteGenerator extends CAPaletteGeneratorLiteralizer {
+  protected override _tokens: TMaterialPalettes;
+
   public constructor(
     public sourceColor: TColor,
     public options?: Partial<TPaletteGeneratorClassConstructorOptions>
   ) {
     super();
+    this._tokens = this._Generate();
   }
 
   private _TransformColorsToInts() {
@@ -100,7 +92,7 @@ export class CPaletteGenerator extends CAPaletteGeneratorLiteralizer {
     };
   }
 
-  private _Generate() {
+  protected override _Generate() {
     const colors = this._TransformColorsToInts();
     const scheme = new DynamicScheme({
       sourceColorArgb: colors.sourceColor,
@@ -143,8 +135,7 @@ export class CPaletteGenerator extends CAPaletteGeneratorLiteralizer {
     return palettes as TMaterialPalettes;
   }
 
-  public Generate() {
-    this.tokens = this._Generate();
-    return this.tokens;
+  public override value(): TMaterialPalettes {
+    return this._tokens;
   }
 }

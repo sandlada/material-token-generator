@@ -25,18 +25,9 @@ import {FromColorStringToInt, ToKebabCase} from '../../utils/strings';
 import {CAGeneratorLiteralizer} from './CAGenerator';
 import type {TStylizableOptions} from './IStylizable';
 
-abstract class CASchemeGeneratorLiteralizer extends CAGeneratorLiteralizer<TMaterialColors | null> {
-  protected override tokens: TMaterialColors | null = null;
-  public abstract Generate(): TMaterialColors;
-
+abstract class CASchemeGeneratorLiteralizer extends CAGeneratorLiteralizer<TMaterialColors> {
   public ToStyleText(options?: Partial<TStylizableOptions>): string {
-    if (this.tokens === null) {
-      console.warn(
-        'Please make sure to call [Generate] correctly before calling [ToStyleText].'
-      );
-      return '';
-    }
-    return Object.entries(this.tokens)
+    return Object.entries(this._tokens)
       .map(
         e =>
           `--${options?.prefix ?? 'md-sys-color'}-${ToKebabCase(e[0])}: ${
@@ -46,9 +37,7 @@ abstract class CASchemeGeneratorLiteralizer extends CAGeneratorLiteralizer<TMate
       .reduce((l, c) => l + c);
   }
 
-  public override toString(): string {
-    return this.ToStyleText();
-  }
+  public override toString = this.ToStyleText;
 }
 
 export type TSchemeGeneratorClassConstructorOptions = {
@@ -63,11 +52,14 @@ export type TSchemeGeneratorClassConstructorOptions = {
 };
 
 export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorLiteralizer {
+  protected override _tokens: TMaterialColors;
+
   public constructor(
     public sourceColor: TColor,
     public options?: Partial<TSchemeGeneratorClassConstructorOptions>
   ) {
     super();
+    this._tokens = this._Generate();
   }
 
   private _TransformColorsToInts() {
@@ -101,7 +93,7 @@ export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorLiteralizer {
     };
   }
 
-  private _Generate(): TMaterialColors {
+  protected override _Generate(): TMaterialColors {
     const colors = this._TransformColorsToInts();
 
     const scheme = new DynamicScheme({
@@ -125,14 +117,15 @@ export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorLiteralizer {
     return theme as TMaterialColors;
   }
 
-  public override Generate() {
-    this.tokens = this._Generate();
-    return this.tokens;
+  public override value(): TMaterialColors {
+    return this._tokens;
   }
 }
 
 export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorLiteralizer {
-  public constructor(
+  protected override _tokens: TMaterialColors;
+
+  constructor(
     public sourceColor: TColor,
     public options?: Partial<
       Pick<TSchemeGeneratorClassConstructorOptions, 'isDark'> &
@@ -141,6 +134,7 @@ export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorLiteralizer {
     >
   ) {
     super();
+    this._tokens = this._Generate();
   }
 
   private _TransformColorsToInts() {
@@ -149,56 +143,66 @@ export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorLiteralizer {
     };
   }
 
-  private _Generate(): TMaterialColors {
+  protected override _Generate(): TMaterialColors {
     const colors = this._TransformColorsToInts();
 
-    const initVariant = () =>
-      [
-        () =>
-          new SchemeMonochrome(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-        () =>
-          new SchemeNeutral(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-        () =>
-          new SchemeTonalSpot(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-        () =>
-          new SchemeVibrant(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-        () =>
-          new SchemeExpressive(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-        () =>
-          new SchemeFidelity(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-        () =>
-          new SchemeContent(
-            Hct.fromInt(colors.sourceColor),
-            this.options?.isDark ?? false,
-            this.options?.contrastLevel ?? EMaterialContrastLevel.Default
-          ),
-      ][this.options?.variant ?? EMaterialVariant.VIBRANT];
+    let scheme = null;
 
-    const scheme = initVariant()();
+    switch (this.options?.variant ?? EMaterialVariant.VIBRANT) {
+      case EMaterialVariant.MONOCHROME:
+        scheme = new SchemeMonochrome(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.NEUTRAL:
+        scheme = new SchemeNeutral(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.TONAL_SPOT:
+        scheme = new SchemeTonalSpot(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.VIBRANT:
+        scheme = new SchemeVibrant(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.EXPRESSIVE:
+        scheme = new SchemeExpressive(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.FIDELITY:
+        scheme = new SchemeFidelity(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      case EMaterialVariant.CONTENT:
+        scheme = new SchemeContent(
+          Hct.fromInt(colors.sourceColor),
+          this.options?.isDark ?? false,
+          this.options?.contrastLevel ?? EMaterialContrastLevel.Default
+        );
+        break;
+      default:
+        throw new Error(
+          `Unaccepted parameter value [options.variant] [${this.options?.variant}]`
+        );
+    }
 
     const theme: Record<string, string> = {};
     for (const [key, value] of Object.entries(MaterialColors)) {
@@ -207,8 +211,7 @@ export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorLiteralizer {
     return theme as TMaterialColors;
   }
 
-  public Generate(): TMaterialColors {
-    this.tokens = this._Generate();
-    return this.tokens;
+  public override value(): TMaterialColors {
+    return this._tokens;
   }
 }

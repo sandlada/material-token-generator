@@ -1,15 +1,9 @@
 import type {IStylizable, TStylizableOptions} from './IStylizable';
 
-interface IMaterialGenerator<T> {
-  Generate: () => NonNullable<T>;
-}
-
-abstract class CAMaterialGenerator<TokenType>
-  extends Object
-  implements IMaterialGenerator<TokenType>
-{
-  protected abstract tokens: TokenType;
-  public abstract Generate(): NonNullable<TokenType>;
+abstract class CAMaterialGenerator<TokenType> {
+  protected abstract _tokens: TokenType;
+  protected abstract _Generate(): NonNullable<TokenType>;
+  public abstract value(): NonNullable<TokenType>;
 }
 
 export abstract class CAGeneratorLiteralizer<TokenType>
@@ -17,5 +11,4 @@ export abstract class CAGeneratorLiteralizer<TokenType>
   implements IStylizable
 {
   public abstract ToStyleText(options?: Partial<TStylizableOptions>): string;
-  public abstract toString(): string;
 }
