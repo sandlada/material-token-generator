@@ -11,5 +11,4 @@ export abstract class CAGeneratorLiteralizer<TokenType>
   implements IStylizable
 {
   public abstract ToStyleText(options?: Partial<TStylizableOptions>): string;
-  public abstract toString(): string;
 }

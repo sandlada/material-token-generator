@@ -36,10 +36,6 @@ abstract class CASchemeGeneratorLiteralizer extends CAGeneratorLiteralizer<TMate
       )
       .reduce((l, c) => l + c);
   }
-
-  public override toString() {
-    return JSON.stringify(this._tokens);
-  }
 }
 
 export type TSchemeGeneratorClassConstructorOptions = {
@@ -109,7 +105,7 @@ export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorLiteralizer {
       contrastLevel:
         this.options?.contrastLevel ?? EMaterialContrastLevel.Default,
       // @ts-ignore
-      variant: this.options?.variant ?? EVariant.VIBRANT,
+      variant: this.options?.variant ?? EMaterialVariant.VIBRANT,
     });
 
     const theme: Record<string, string> = {};

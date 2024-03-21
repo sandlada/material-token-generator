@@ -43,8 +43,6 @@ abstract class CAPaletteGeneratorLiteralizer extends CAGeneratorLiteralizer<TMat
       )
       .reduce((p, c) => p + c);
   }
-
-  public override toString = this.ToStyleText;
 }
 
 export type TPaletteGeneratorClassConstructorOptions = {
