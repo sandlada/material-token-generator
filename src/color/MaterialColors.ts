@@ -4,7 +4,7 @@ type THexColor = `#${string}`;
 type TRgbColor = `rgb(${number}, ${number}, ${number})`;
 type TRgbaColor = `rgb(${number}, ${number}, ${number}, ${number})`;
 export type TColor = THexColor | TRgbColor | TRgbaColor;
-export const enum EColorType {
+export enum EColorType {
   Hex = 'hex',
   Rgb = 'rgb',
   Rgba = 'rgba',

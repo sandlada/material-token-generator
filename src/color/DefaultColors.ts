@@ -1,4 +1,4 @@
-export const enum EColor {
+export enum EColor {
   Aliceblue = '#f0f8ff',
   Antiquewhite = '#faebd7',
   Aqua = '#00ffff',
