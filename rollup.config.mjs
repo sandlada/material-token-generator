@@ -7,12 +7,8 @@ export default {
   input: './src/index.ts',
   output: [
     {
-      file: './build/index.cjs',
-      format: 'cjs',
-    },
-    {
-      file: './build/index.mjs',
-      format: 'es',
+      file: './build/index.js',
+      format: 'esm',
     },
   ],
   plugins: [nodeResolve(), typescript({tsconfig: './tsconfig.json'}), terser()],
