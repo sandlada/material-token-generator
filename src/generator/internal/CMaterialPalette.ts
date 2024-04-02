@@ -18,11 +18,11 @@ import {
 import {EMaterialVariant, type TMaterialVariant} from '../../color/Variant';
 import type {TColor} from '../../color/MaterialColors';
 import {FromColorStringToInt} from '../../utils/strings';
-import {CAGeneratorLiteralizer} from './CAGenerator';
-import type {TStylizableOptions} from './IStylizable';
+import {CAMaterialGenerator} from './CAGenerator';
 import type {TMaterialPalettes} from '../../color/MaterialPalette';
+import { TStylizableOptions } from './IStylizable';
 
-abstract class CAPaletteGeneratorLiteralizer extends CAGeneratorLiteralizer<TMaterialPalettes> {
+abstract class CAPaletteGeneratorLiteralizer extends CAMaterialGenerator<TMaterialPalettes> {
   public ToStyleText(options?: Partial<TStylizableOptions>): string {
     return Object.entries(this._tokens)
       .map(e =>
@@ -141,7 +141,7 @@ export class CPaletteGeneratorUsingPalette extends CAPaletteGeneratorLiteralizer
     return palettes as TMaterialPalettes;
   }
 
-  public override value(): TMaterialPalettes {
+  public get value(): TMaterialPalettes {
     return this._tokens;
   }
 }
@@ -254,7 +254,7 @@ export class CPaletteGeneratorUsingVariant extends CAPaletteGeneratorLiteralizer
     return palettes as TMaterialPalettes;
   }
 
-  public override value(): TMaterialPalettes {
+  public get value(): TMaterialPalettes {
     return this._tokens;
   }
 }

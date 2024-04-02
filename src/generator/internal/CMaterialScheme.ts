@@ -22,10 +22,10 @@ import {
   type TMaterialColors,
 } from '../../color/MaterialColors';
 import {FromColorStringToInt, ToKebabCase} from '../../utils/strings';
-import {CAGeneratorLiteralizer} from './CAGenerator';
-import type {TStylizableOptions} from './IStylizable';
+import {CAMaterialGenerator} from './CAGenerator';
+import { TStylizableOptions } from './IStylizable';
 
-abstract class CASchemeGeneratorLiteralizer extends CAGeneratorLiteralizer<TMaterialColors> {
+abstract class CASchemeGeneratorPreLiteralizer extends CAMaterialGenerator<TMaterialColors> {
   public ToStyleText(options?: Partial<TStylizableOptions>): string {
     return Object.entries(this._tokens)
       .map(
@@ -49,7 +49,7 @@ export type TSchemeGeneratorClassConstructorOptions = {
   variant: TMaterialVariant;
 };
 
-export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorLiteralizer {
+export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorPreLiteralizer {
   protected override _tokens: TMaterialColors;
 
   public constructor(
@@ -115,12 +115,12 @@ export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorLiteralizer {
     return theme as TMaterialColors;
   }
 
-  public override value(): TMaterialColors {
+  public get value(): TMaterialColors {
     return this._tokens;
   }
 }
 
-export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorLiteralizer {
+export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorPreLiteralizer {
   protected override _tokens: TMaterialColors;
 
   constructor(
@@ -209,7 +209,7 @@ export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorLiteralizer {
     return theme as TMaterialColors;
   }
 
-  public override value(): TMaterialColors {
+  public get value(): TMaterialColors {
     return this._tokens;
   }
 }
