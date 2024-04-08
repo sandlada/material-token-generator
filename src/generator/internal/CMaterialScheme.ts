@@ -25,18 +25,16 @@ import {FromColorStringToInt, ToKebabCase} from '../../utils/strings';
 import {CAMaterialGenerator} from './CAGenerator';
 import { TStylizableOptions } from './IStylizable';
 
+/* eslint-disable */
 abstract class CASchemeGeneratorPreLiteralizer extends CAMaterialGenerator<TMaterialColors> {
   public ToStyleText(options?: Partial<TStylizableOptions>): string {
-    return Object.entries(this._tokens)
-      .map(
-        e =>
-          `--${options?.prefix ?? 'md-sys-color'}-${ToKebabCase(e[0])}: ${
-            e[1]
-          };`
-      )
+    return Object
+      .entries(this._tokens)
+      .map(e => `--${options?.prefix ?? 'md-sys-color'}-${ToKebabCase(e[0])}: ${e[1]};`)
       .reduce((l, c) => l + c);
   }
 }
+/* eslint-disable */
 
 export type TSchemeGeneratorClassConstructorOptions = {
   isDark: boolean;

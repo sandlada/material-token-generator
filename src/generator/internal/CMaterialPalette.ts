@@ -15,35 +15,29 @@ import {
   type TMaterialContrastLevel,
   EMaterialContrastLevel,
 } from '../../color/Contrast';
-import {EMaterialVariant, type TMaterialVariant} from '../../color/Variant';
-import type {TColor} from '../../color/MaterialColors';
-import {FromColorStringToInt} from '../../utils/strings';
-import {CAMaterialGenerator} from './CAGenerator';
-import type {TMaterialPalettes} from '../../color/MaterialPalette';
+import { EMaterialVariant, type TMaterialVariant } from '../../color/Variant';
+import type { TColor } from '../../color/MaterialColors';
+import { FromColorStringToInt, ToKebabCase } from '../../utils/strings';
+import { CAMaterialGenerator } from './CAGenerator';
+import type { TMaterialPalettes } from '../../color/MaterialPalette';
 import { TStylizableOptions } from './IStylizable';
 
+/* eslint-disable */
 abstract class CAPaletteGeneratorLiteralizer extends CAMaterialGenerator<TMaterialPalettes> {
   public ToStyleText(options?: Partial<TStylizableOptions>): string {
-    return Object.entries(this._tokens)
-      .map(e =>
-        Object.entries(e[1])
-          .map(i => {
-            const isNpV = i[0][1] === 'V';
-            if (isNpV) {
-              return `--${options?.prefix ?? 'md-sys-palette'}-${i[0]
-                .slice(0, 2)
-                .toLowerCase()}-${i[0].slice(2)}: ${i[1]};`;
-            } else {
-              return `--${
-                options?.prefix ?? 'md-sys-palette'
-              }-${i[0][0].toLowerCase()}-${i[0].slice(1)}: ${i[1]};`;
-            }
-          })
-          .reduce((p, c) => p + c)
-      )
-      .reduce((p, c) => p + c);
+    return Object.entries(this._tokens).map(e => Object.entries(e[1]).map(i => {
+      // param e:
+      //   [e[0]]: primary | secondary | tertiary | neutral | neutralVariant
+      //   [e[1]]: { N0: '#123456', N10: '' ......  }
+      // param i:
+      //   [i[0]]: 'N0' like
+      //   [i[1]]: Color hex
+      const prefix = options?.prefix ?? 'md-ref-palette'
+      return `--${prefix}-${ToKebabCase(e[0])}-${i[0]}: ${i[1]};`
+    }).reduce((p, c) => p + c)).reduce((p, c) => p + c);
   }
 }
+/* eslint-enable */
 
 export type TPaletteGeneratorClassConstructorOptions = {
   isDark: boolean;
@@ -126,14 +120,14 @@ export class CPaletteGeneratorUsingPalette extends CAPaletteGeneratorLiteralizer
     for (const l of this.options?.cl ?? [
       0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100,
     ]) {
-      palettes.primary[`P${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
-      palettes.secondary[`S${l}`] = hexFromArgb(
+      palettes.primary[`${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
+      palettes.secondary[`${l}`] = hexFromArgb(
         scheme.secondaryPalette.tone(l)
       );
-      palettes.tertiary[`T${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
-      palettes.error[`E${l}`] = hexFromArgb(scheme.errorPalette.tone(l));
-      palettes.neutral[`N${l}`] = hexFromArgb(scheme.neutralPalette.tone(l));
-      palettes.neutralVariant[`NV${l}`] = hexFromArgb(
+      palettes.tertiary[`${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
+      palettes.error[`${l}`] = hexFromArgb(scheme.errorPalette.tone(l));
+      palettes.neutral[`${l}`] = hexFromArgb(scheme.neutralPalette.tone(l));
+      palettes.neutralVariant[`${l}`] = hexFromArgb(
         scheme.neutralVariantPalette.tone(l)
       );
     }
@@ -153,9 +147,9 @@ export class CPaletteGeneratorUsingVariant extends CAPaletteGeneratorLiteralizer
     public sourceColor: TColor,
     public options?: Partial<
       Pick<TPaletteGeneratorClassConstructorOptions, 'cl'> &
-        Pick<TPaletteGeneratorClassConstructorOptions, 'isDark'> &
-        Pick<TPaletteGeneratorClassConstructorOptions, 'contrastLevel'> &
-        Pick<TPaletteGeneratorClassConstructorOptions, 'variant'>
+      Pick<TPaletteGeneratorClassConstructorOptions, 'isDark'> &
+      Pick<TPaletteGeneratorClassConstructorOptions, 'contrastLevel'> &
+      Pick<TPaletteGeneratorClassConstructorOptions, 'variant'>
     >
   ) {
     super();
@@ -239,14 +233,14 @@ export class CPaletteGeneratorUsingVariant extends CAPaletteGeneratorLiteralizer
     for (const l of this.options?.cl ?? [
       0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100,
     ]) {
-      palettes.primary[`P${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
-      palettes.secondary[`S${l}`] = hexFromArgb(
+      palettes.primary[`${l}`] = hexFromArgb(scheme.primaryPalette.tone(l));
+      palettes.secondary[`${l}`] = hexFromArgb(
         scheme.secondaryPalette.tone(l)
       );
-      palettes.tertiary[`T${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
-      palettes.error[`E${l}`] = hexFromArgb(scheme.errorPalette.tone(l));
-      palettes.neutral[`N${l}`] = hexFromArgb(scheme.neutralPalette.tone(l));
-      palettes.neutralVariant[`NV${l}`] = hexFromArgb(
+      palettes.tertiary[`${l}`] = hexFromArgb(scheme.tertiaryPalette.tone(l));
+      palettes.error[`${l}`] = hexFromArgb(scheme.errorPalette.tone(l));
+      palettes.neutral[`${l}`] = hexFromArgb(scheme.neutralPalette.tone(l));
+      palettes.neutralVariant[`${l}`] = hexFromArgb(
         scheme.neutralVariantPalette.tone(l)
       );
     }
