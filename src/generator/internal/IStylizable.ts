@@ -3,9 +3,9 @@ export type TStylizableOptions = {
 };
 
 export interface IStylizable {
-    ToStyleText(options?: Partial<TStylizableOptions>): string;
+    toStyleText(options?: Partial<TStylizableOptions>): string;
 }
 
 export abstract class CALiteralizer implements IStylizable {
-    public abstract ToStyleText(options?: Partial<TStylizableOptions>): string;
+    public abstract toStyleText(options?: Partial<TStylizableOptions>): string;
 }

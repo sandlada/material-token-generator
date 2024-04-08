@@ -13,14 +13,14 @@ import {
 export class MaterialDynamicSchemeGenerator {
   private constructor() {}
 
-  public static GenerateByPalette(
+  public static generateByPalette(
     sourceColor: TColor,
     options?: Partial<TSchemeGeneratorClassConstructorOptions>
   ) {
     return new CSchemeGeneratorUsingPalette(sourceColor, options);
   }
 
-  public static GenerateByVariant(
+  public static generateByVariant(
     sourceColor: TColor,
     options?: Partial<
       Pick<TSchemeGeneratorClassConstructorOptions, 'isDark'> &
@@ -35,14 +35,14 @@ export class MaterialDynamicSchemeGenerator {
 export class MaterialPaletteGenerator {
   private constructor() {}
 
-  public static GenerateByPalette(
+  public static generateByPalette(
     sourceColor: TColor,
     options?: Partial<TPaletteGeneratorClassConstructorOptions>
   ) {
     return new CPaletteGeneratorUsingPalette(sourceColor, options);
   }
 
-  public static GenerateByVariant(
+  public static generateByVariant(
     sourceColor: TColor,
     options?: Partial<
       Pick<TPaletteGeneratorClassConstructorOptions, 'cl'> &

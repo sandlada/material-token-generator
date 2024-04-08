@@ -24,7 +24,7 @@ import { TStylizableOptions } from './IStylizable';
 
 /* eslint-disable */
 abstract class CAPaletteGeneratorLiteralizer extends CAMaterialGenerator<TMaterialPalettes> {
-  public ToStyleText(options?: Partial<TStylizableOptions>): string {
+  public toStyleText(options?: Partial<TStylizableOptions>): string {
     return Object.entries(this._tokens).map(e => Object.entries(e[1]).map(i => {
       // param e:
       //   [e[0]]: primary | secondary | tertiary | neutral | neutralVariant
@@ -58,10 +58,10 @@ export class CPaletteGeneratorUsingPalette extends CAPaletteGeneratorLiteralizer
     public options?: Partial<TPaletteGeneratorClassConstructorOptions>
   ) {
     super();
-    this._tokens = this._Generate();
+    this._tokens = this._generate();
   }
 
-  private _TransformColorsToInts() {
+  private _transformColorsToInts() {
     return {
       sourceColor: FromColorStringToInt(this.sourceColor),
       primaryPalette: TonalPalette.fromInt(
@@ -92,8 +92,8 @@ export class CPaletteGeneratorUsingPalette extends CAPaletteGeneratorLiteralizer
     };
   }
 
-  protected override _Generate() {
-    const colors = this._TransformColorsToInts();
+  protected override _generate() {
+    const colors = this._transformColorsToInts();
     const scheme = new DynamicScheme({
       sourceColorArgb: colors.sourceColor,
       primaryPalette: colors.primaryPalette,
@@ -153,17 +153,17 @@ export class CPaletteGeneratorUsingVariant extends CAPaletteGeneratorLiteralizer
     >
   ) {
     super();
-    this._tokens = this._Generate();
+    this._tokens = this._generate();
   }
 
-  private _TransformColorsToInts() {
+  private _transformColorsToInts() {
     return {
       sourceColor: FromColorStringToInt(this.sourceColor),
     };
   }
 
-  protected override _Generate() {
-    const colors = this._TransformColorsToInts();
+  protected override _generate() {
+    const colors = this._transformColorsToInts();
     let scheme = null;
 
     switch (this.options?.variant ?? EMaterialVariant.VIBRANT) {

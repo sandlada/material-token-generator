@@ -16,14 +16,14 @@ const colorConfiguration = {
 }
 
 const generateSchemeByVariant = () => {
-    const generated = MaterialDynamicSchemeGenerator.GenerateByVariant(colorConfiguration.color, {
+    const generated = MaterialDynamicSchemeGenerator.generateByVariant(colorConfiguration.color, {
         contrastLevel: colorConfiguration.contrastLevel,
         isDark: colorConfiguration.isDakk,
         variant: colorConfiguration.variant,
     })
 
     const objValue = generated.value
-    const objStylesText = generated.ToStyleText()
+    const objStylesText = generated.toStyleText()
 
     console.log(objValue, objStylesText);
 
@@ -50,7 +50,7 @@ For example:
 ```javascript
 import { MaterialDynamicSchemeGenerator } from '@glare-labs/material-tokens-generator';
 
-const s = MaterialDynamicSchemeGenerator.GenerateByVariant('#123456');
+const s = MaterialDynamicSchemeGenerator.generateByVariant('#123456');
 
 /**
  * @output
@@ -72,7 +72,7 @@ console.log(s.value);
  * --my-prefix-on-tertiary-fixed: #151643;
  * --my-prefix-on-tertiary-fixed-variant: #414271;
  */
-console.log(s.ToStyleText({ prefix: 'my-prefix' }));
+console.log(s.toStyleText({ prefix: 'my-prefix' }));
 ```
 
 ### Generate palettes
@@ -81,20 +81,20 @@ For example:
 ```javascript
 import { MaterialPaletteGenerator } from '@glare-labs/material-tokens-generator';
 
-const p = MaterialPaletteGenerator.GenerateByVariant('#123456');
+const p = MaterialPaletteGenerator.generateByVariant('#123456');
 
 /**
  * @output
  * {
  *   primary: {
- *     P0: '#000000'
- *     P5: '#001225'
+ *     0: '#000000'
+ *     5: '#001225'
  *     ...
  *   },
  *   ...
  *   neutralVariant: {
- *     NV0: '#000000',
- *     NV5: '#09111b',
+ *     0: '#000000',
+ *     5: '#09111b',
  *     ...
  *   }
  * }
@@ -103,13 +103,13 @@ console.log(p.value);
 
 /**
  * @output
- * --my-prefix-p-0: #000000;
- * --my-prefix-p-5: #001225;
+ * --my-prefix-primary-0: #000000;
+ * --my-prefix-primary-5: #001225;
  * ...
- * --my-prefix-nv-95: #eaf1ff;
- * --my-prefix-nv-100: #ffffff;
+ * --my-prefix-neutral-variant-95: #eaf1ff;
+ * --my-prefix-neutral-variant-100: #ffffff;
  */
-console.log(p.ToStyleText({ prefix: 'my-prefix' }));
+console.log(p.toStyleText({ prefix: 'my-prefix' }));
 ```
 
 ## API
@@ -117,11 +117,11 @@ console.log(p.ToStyleText({ prefix: 'my-prefix' }));
 |Classes|Features|
 |:--|--:|
 |MaterialDynamicSchemeGenerator|Used to create tokens like `--md-sys-color-primary`.|
-|MaterialPaletteGenerator|Used to create tokens like `--md-palette-p-40`.|
+|MaterialPaletteGenerator|Used to create tokens like `--md-palette-primary-40`.|
 
 ### MaterialDynamicSchemeGenerator
 
-#### GenerateByVariant()
+#### generateByVariant()
 
 |Param|Type|Option|Required|
 |:--|:--|:--|--:|
@@ -131,13 +131,13 @@ console.log(p.ToStyleText({ prefix: 'my-prefix' }));
 |options|-1.0 \| 0 \| 0.5 \| 1.0|contrastLevel|No|
 
 ```javascript
-MaterialDynamicSchemeGenerator.GenerateByVariant('#123456');
+MaterialDynamicSchemeGenerator.generateByVariant('#123456');
 
-MaterialDynamicSchemeGenerator.GenerateByVariant('#123456', {
+MaterialDynamicSchemeGenerator.generateByVariant('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
 });
 
-MaterialDynamicSchemeGenerator.GenerateByVariant('#123456', {
+MaterialDynamicSchemeGenerator.generateByVariant('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
   isDark: true,
   contrastLevel: EMaterialContrastLevel.HIGH
@@ -145,7 +145,7 @@ MaterialDynamicSchemeGenerator.GenerateByVariant('#123456', {
 ```
 
 
-#### GenerateByPalette()
+#### generateByPalette()
 
 |Param|Type|Option|Required|
 |:--|:--|:--|--:|
@@ -160,13 +160,13 @@ MaterialDynamicSchemeGenerator.GenerateByVariant('#123456', {
 |options|string|neutralVariantPalette|No|
 
 ```javascript
-MaterialDynamicSchemeGenerator.GenerateByPalette('#123456');
+MaterialDynamicSchemeGenerator.generateByPalette('#123456');
 
-MaterialDynamicSchemeGenerator.GenerateByPalette('#123456', {
+MaterialDynamicSchemeGenerator.generateByPalette('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
 });
 
-MaterialDynamicSchemeGenerator.GenerateByPalette('#123456', {
+MaterialDynamicSchemeGenerator.generateByPalette('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
   isDark: true,
   contrastLevel: EMaterialContrastLevel.HIGH,
@@ -181,7 +181,7 @@ MaterialDynamicSchemeGenerator.GenerateByPalette('#123456', {
 |||
 
 ```javascript
-const s = MaterialDynamicSchemeGenerator.GenerateByVariant('#123456');
+const s = MaterialDynamicSchemeGenerator.generateByVariant('#123456');
 
 /**
  * @output
@@ -202,33 +202,33 @@ const tokens = s.value
 const onSurfaceHex = tokens.onSurface
 ```
 
-#### ToStyleText()
+#### toStyleText()
 
 |Param|Type|Option|Required|
 |:--|:--|:--|--:|
 |options|string|prefix|No|
 
 ```javascript
-const s = MaterialDynamicSchemeGenerator.GenerateByVariant('#123456');
+const s = MaterialDynamicSchemeGenerator.generateByVariant('#123456');
 
 /**
  * @output
  * --md-sys-color-primary-palette-key-color: #0697ff; ...
  */
-const style1 = s.ToStyleText()
+const style1 = s.toStyleText()
 
 /**
  * @output
  * --my-loved-primary-palette-key-color: #0697ff; ...
  */
-const style2 = s.ToStyleText({
+const style2 = s.toStyleText({
     prefix: 'my-loved'
 })
 ```
 
 ### MaterialPaletteGenerator
 
-#### GenerateByVariant()
+#### generateByVariant()
 
 |Param|Type|Option|Required|
 |:--|:--|:--|--:|
@@ -239,20 +239,20 @@ const style2 = s.ToStyleText({
 |options|Array\<number>|cl|No|
 
 ```javascript
-MaterialPaletteGenerator.GenerateByVariant('#123456');
+MaterialPaletteGenerator.generateByVariant('#123456');
 
-MaterialPaletteGenerator.GenerateByVariant('#123456', {
+MaterialPaletteGenerator.generateByVariant('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
 });
 
-MaterialPaletteGenerator.GenerateByVariant('#123456', {
+MaterialPaletteGenerator.generateByVariant('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
   isDark: true,
   cl: [0, 50, 100]
 });
 ```
 
-#### GenerateByPalette()
+#### generateByPalette()
 
 |Param|Type|Option|Required|
 |:--|:--|:--|--:|
@@ -268,13 +268,13 @@ MaterialPaletteGenerator.GenerateByVariant('#123456', {
 |options|Array\<number>|cl|No|
 
 ```javascript
-MaterialPaletteGenerator.GenerateByPalette('#123456');
+MaterialPaletteGenerator.generateByPalette('#123456');
 
-MaterialPaletteGenerator.GenerateByPalette('#123456', {
+MaterialPaletteGenerator.generateByPalette('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
 });
 
-MaterialPaletteGenerator.GenerateByPalette('#123456', {
+MaterialPaletteGenerator.generateByPalette('#123456', {
   variant: EMaterialVariant.TONAL_SPOT,
   isDark: true,
   cl: [0, 30, 60, 90, 100],
@@ -282,14 +282,14 @@ MaterialPaletteGenerator.GenerateByPalette('#123456', {
 });
 ```
 
-#### value()
+#### value
 
 |Param|Type|Required|
 |:--|:--|--:|
 |||
 
 ```javascript
-const s = MaterialPaletteGenerator.GenerateByVariant('#123456');
+const s = MaterialPaletteGenerator.generateByVariant('#123456');
 
 /**
  * @output
@@ -308,29 +308,29 @@ const tokens = s.value
  * @output
  * #00325a
  */
-const p20 = tokens.primary.P20;
+const p20 = tokens.primary[20];
 ```
 
-#### ToStyleText()
+#### toStyleText()
 
 |Param|Type|Option|Required|
 |:--|:--|:--|--:|
 |options|string|prefix|No|
 
 ```javascript
-const s = MaterialPaletteGenerator.GenerateByVariant('#123456');
+const s = MaterialPaletteGenerator.generateByVariant('#123456');
 
 /**
  * @output
- * --md-sys-palette-p-0: #000000;--md-sys-palette-p-5: #001225; ...
+ * --md-sys-palette-primary-0: #000000;--md-sys-palette-primary-5: #001225; ...
  */
-const style1 = s.ToStyleText()
+const style1 = s.toStyleText()
 
 /**
  * @output
- * --my-loved-p-0: #000000;--my-loved-p-5: #001225;--my-loved-p-10: #001c37; ...
+ * --my-loved-primary-0: #000000;--my-loved-primary-5: #001225;--my-loved-primary-10: #001c37; ...
  */
-const style2 = s.ToStyleText({
+const style2 = s.toStyleText({
     prefix: 'my-loved'
 })
 ```

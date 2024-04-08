@@ -27,7 +27,7 @@ import { TStylizableOptions } from './IStylizable';
 
 /* eslint-disable */
 abstract class CASchemeGeneratorPreLiteralizer extends CAMaterialGenerator<TMaterialColors> {
-  public ToStyleText(options?: Partial<TStylizableOptions>): string {
+  public toStyleText(options?: Partial<TStylizableOptions>): string {
     return Object
       .entries(this._tokens)
       .map(e => `--${options?.prefix ?? 'md-sys-color'}-${ToKebabCase(e[0])}: ${e[1]};`)
@@ -55,7 +55,7 @@ export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorPreLiteralize
     public options?: Partial<TSchemeGeneratorClassConstructorOptions>
   ) {
     super();
-    this._tokens = this._Generate();
+    this._tokens = this._generate();
   }
 
   private _TransformColorsToInts() {
@@ -89,7 +89,7 @@ export class CSchemeGeneratorUsingPalette extends CASchemeGeneratorPreLiteralize
     };
   }
 
-  protected override _Generate(): TMaterialColors {
+  protected override _generate(): TMaterialColors {
     const colors = this._TransformColorsToInts();
 
     const scheme = new DynamicScheme({
@@ -130,7 +130,7 @@ export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorPreLiteralize
     >
   ) {
     super();
-    this._tokens = this._Generate();
+    this._tokens = this._generate();
   }
 
   private _TransformColorsToInts() {
@@ -139,7 +139,7 @@ export class CSchemeGeneratorUsingVariant extends CASchemeGeneratorPreLiteralize
     };
   }
 
-  protected override _Generate(): TMaterialColors {
+  protected override _generate(): TMaterialColors {
     const colors = this._TransformColorsToInts();
 
     let scheme = null;

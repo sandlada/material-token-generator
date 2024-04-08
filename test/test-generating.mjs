@@ -15,9 +15,9 @@ const generateSchemeByVariant = () => {
     })
 
     const objValue = generated.value
-    const objStylesText = generated.ToStyleText()
+    const objStylesText = generated.toStyleText()
 
-    console.log(objValue, objStylesText);
+    console.log('\n\n=== Output [MaterialDynamicSchemeGenerator.GenerateByVariant].value\n', objValue, '\n=== [MaterialDynamicSchemeGenerator.GenerateByVariant].toStyleText\n', objStylesText);
 
     return objStylesText
 }
@@ -35,9 +35,9 @@ const generateSchemeByPalette = () => {
     })
 
     const objValue = generated.value
-    const objStylesText = generated.ToStyleText()
+    const objStylesText = generated.toStyleText()
 
-    console.log(objValue, objStylesText);
+    console.log('\n\n=== Output [MaterialDynamicSchemeGenerator.GenerateByPalette].value\n', objValue, '\n=== [MaterialDynamicSchemeGenerator.GenerateByPalette].toStyleText\n', objStylesText);
 
     return objStylesText
 }
