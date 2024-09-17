@@ -1,6 +1,6 @@
-import {nodeResolve} from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
-import terser from '@rollup/plugin-terser';
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import terser from '@rollup/plugin-terser'
+import typescript from '@rollup/plugin-typescript'
 
 // rollup.config.mjs
 export default {
@@ -11,5 +11,11 @@ export default {
       format: 'esm',
     },
   ],
-  plugins: [nodeResolve(), typescript({tsconfig: './tsconfig.json'}), terser()],
+  plugins: [
+    nodeResolve({
+      resolveOnly: ["@glare-labs/jtc-lib"]
+    }), 
+    typescript({tsconfig: './tsconfig.json'}), 
+    terser()
+  ],
 };

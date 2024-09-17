@@ -36,27 +36,22 @@
   "types": "build/index.d.ts",
   "typings": "build/index.d.ts",
   "scripts": {
-    "lint": "gts lint",
-    "clean": "gts clean",
-    "compile": "rollup --config",
-    "fix": "gts fix",
-    "prepare": "npm.cmd run compile",
-    "pretest": "npm.cmd run compile",
-    "posttest": "npm.cmd run lint"
+    "compile": "rollup --config"
   },
   "author": "bre97-web",
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@material/material-color-utilities": "^0.2.7"
+    "@glare-labs/jtc-lib": "^0.0.1"
   },
   "devDependencies": {
+    "@material/material-color-utilities": "^0.2.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "20.8.2",
-    "gts": "^5.2.0",
     "rollup": "^4.13.0",
+    "tslib": "^2.7.0",
     "typescript": "~5.2.0"
   }
 }
