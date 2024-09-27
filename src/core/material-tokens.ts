@@ -201,15 +201,15 @@ class MaterialColors {
 }
 
 export class MaterialTokens extends MaterialColors implements IMaterialTokens {
-    private _hct: Hct
-    private _isDark: boolean
-    private _contrastLevel: number
-    private _variant: TMaterialVariant
+    protected _hct: Hct
+    protected _isDark: boolean
+    protected _contrastLevel: number
+    protected _variant: TMaterialVariant
 
-    private prefix: string
+    protected prefix: string
 
-    private excludedTokens: Array<TMaterialColorKey>
-    private customTokens: Partial<Record<keyof TMaterialColorKey, DynamicColor>>
+    protected excludedTokens: Array<TMaterialColorKey>
+    protected customTokens: Partial<Record<keyof TMaterialColorKey, DynamicColor>>
 
     constructor(
         hct: Hct,
