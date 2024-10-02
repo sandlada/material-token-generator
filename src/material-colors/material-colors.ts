@@ -60,7 +60,7 @@ export type TMaterialColors = {
 /**
  * A Mapping of color token name to MCU HCT color function generator.
  */
-export class MaterialColors {
+export class MaterialColors implements Iterable<DynamicColor, DynamicColor | undefined, DynamicColor | undefined> {
     private static readonly primaryPaletteKeyColor = MaterialDynamicColors.primaryPaletteKeyColor
     private static readonly secondaryPaletteKeyColor = MaterialDynamicColors.secondaryPaletteKeyColor
     private static readonly tertiaryPaletteKeyColor = MaterialDynamicColors.tertiaryPaletteKeyColor
@@ -234,5 +234,42 @@ export class MaterialColors {
         ]
     }
 
+    private static get iterator(): () => Iterator<DynamicColor, DynamicColor | undefined, DynamicColor | undefined> {
+        return () => {
+            let index = 0
+            return ({
+                next: () => {
+                    if (index >= Object.keys(MaterialColors.values).length) {
+                        return ({
+                            value: undefined,
+                            done: true,
+                        })
+                    }
+                    return ({
+                        value: MaterialColors.array[index++],
+                        done: false
+                    })
+                },
+                return: (value?: DynamicColor) => {
+                    index = 0
+                    return ({
+                        value: undefined,
+                        done: true
+                    })
+                }
+            })
+        }
+    }
 
+    public [Symbol.iterator]() {
+        return MaterialColors.iterator()
+    }
+
+    public static [Symbol.iterator]() {
+        return MaterialColors.iterator()
+    }
+
+    public static get json() {
+        return JSON.stringify(MaterialColors.values)
+    }
 }
