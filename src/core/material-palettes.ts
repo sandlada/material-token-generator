@@ -25,7 +25,7 @@ export class MaterialPalettes extends MaterialDynamicPalettes {
             contrastLevel: TMaterialContrastLevel,
             variant: TMaterialVariant | null,
             prefix: string,
-            level: Array<number>
+            levels: Array<number>
         }>
     ) {
         super({
