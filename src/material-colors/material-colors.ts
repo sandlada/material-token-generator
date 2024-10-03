@@ -60,7 +60,7 @@ export type TMaterialColors = {
 /**
  * A Mapping of color token name to MCU HCT color function generator.
  */
-export class MaterialColors implements Iterable<DynamicColor, DynamicColor | undefined, DynamicColor | undefined> {
+export class MaterialColors implements Iterable<DynamicColor> {
     private static readonly primaryPaletteKeyColor = MaterialDynamicColors.primaryPaletteKeyColor
     private static readonly secondaryPaletteKeyColor = MaterialDynamicColors.secondaryPaletteKeyColor
     private static readonly tertiaryPaletteKeyColor = MaterialDynamicColors.tertiaryPaletteKeyColor
