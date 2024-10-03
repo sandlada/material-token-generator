@@ -5,16 +5,17 @@
         "source.sortImports": "always",
         "source.organizeImports": "always",
         "source.removeUnusedImports": "always",
-        "source.organizeLinkDefinitions": "always"
+        "source.organizeLinkDefinitions": "always",
+        "source.addMissingImports.ts": "always"
     },
-    "eslint.validate": [
-        "javascript",
-        "typescript"
-    ],
     "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
     "editor.tabSize": 4,
+    "editor.insertSpaces": true,
     "javascript.format.enable": true,
     "typescript.format.enable": true,
     "javascript.format.semicolons": "remove",  
     "typescript.format.semicolons": "remove",
+    "typescript.format.insertSpaceAfterConstructor": false,
 }
