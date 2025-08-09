@@ -1,21 +1,24 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 
 // rollup.config.mjs
 export default {
-  input: './src/index.ts',
-  output: [
-    {
-      file: './build/index.js',
-      format: 'esm',
+    input: {
+        'index': './src/index.ts',
+        'create-tokens': './src/create-tokens.ts',
+        'material-colors': './src/material/material-colors.ts',
+        'material-contrast-level': './src/material/material-contrast-level.ts',
+        'material-variant': './src/material/material-variant.ts',
+        'to-kebab-case': './src/string-utils/to-kebab-case.ts',
+
     },
-  ],
-  plugins: [
-    nodeResolve({
-      resolveOnly: ["@glare-labs/jtc-lib"]
-    }), 
-    typescript({tsconfig: './tsconfig.json'}), 
-    terser()
-  ],
-};
+    format: 'es',
+    output: {
+        dir: 'build'
+    },
+    plugins: [
+        typescript({ tsconfig: './tsconfig.json' }),
+        terser()
+    ],
+    external: '@material/material-color-utilities'
+}
