@@ -12,8 +12,8 @@ export default {
         'to-kebab-case': './src/string-utils/to-kebab-case.ts',
 
     },
-    format: 'es',
     output: {
+        format: 'es',
         dir: 'build'
     },
     plugins: [
